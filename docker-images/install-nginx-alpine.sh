@@ -5,11 +5,11 @@
 # Standard set up Nginx Alpine
 # https://github.com/nginxinc/docker-nginx/blob/41156d8a36bd03b2fb36353ba31f16ada08d9e48/mainline/alpine/Dockerfile
 
-ENV NGINX_VERSION 1.19.6
-ENV NJS_VERSION   0.5.0
-ENV PKG_RELEASE   1
+export NGINX_VERSION=1.19.6
+export NJS_VERSION=0.5.0
+export PKG_RELEASE=1
 
-RUN set -x \
+set -x \
     && addgroup -g 101 -S nginx \
     && adduser -S -D -H -u 101 -h /var/cache/nginx -s /sbin/nologin -G nginx -g nginx nginx \
     && apkArch="$(cat /etc/apk/arch)" \
