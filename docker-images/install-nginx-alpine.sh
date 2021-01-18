@@ -3,13 +3,15 @@
 # From official Nginx Docker image, as a script to re-use it, removing internal comments
 
 # Standard set up Nginx Alpine
-# https://github.com/nginxinc/docker-nginx/blob/594ce7a8bc26c85af88495ac94d5cd0096b306f7/mainline/alpine/Dockerfile
+# https://github.com/nginxinc/docker-nginx/blob/41156d8a36bd03b2fb36353ba31f16ada08d9e48/mainline/alpine/Dockerfile
 
-export NGINX_VERSION=1.17.10
-export NJS_VERSION=0.3.9
-export PKG_RELEASE=1
+ENV NGINX_VERSION 1.19.6
+ENV NJS_VERSION   0.5.0
+ENV PKG_RELEASE   1
 
-set -x \
+RUN set -x \
+    && addgroup -g 101 -S nginx \
+    && adduser -S -D -H -u 101 -h /var/cache/nginx -s /sbin/nologin -G nginx -g nginx nginx \
     && apkArch="$(cat /etc/apk/arch)" \
     && nginxPackages=" \
         nginx=${NGINX_VERSION}-r${PKG_RELEASE} \
@@ -89,7 +91,8 @@ set -x \
     && apk del .gettext \
     && mv /tmp/envsubst /usr/local/bin/ \
     && apk add --no-cache tzdata \
+    && apk add --no-cache curl ca-certificates \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
-    && ln -sf /dev/stderr /var/log/nginx/error.log
+    && ln -sf /dev/stderr /var/log/nginx/error.log \
 
 # Standard set up Nginx finished
